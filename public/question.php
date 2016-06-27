@@ -1,7 +1,7 @@
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "GET")
     {
-        $array["key"] = file_get_contents("../uploads" . "question.html");
+        $array["key"] = file_get_contents("../public/uploads/" . "question.html");
         //print(json_encode(["key" => "value"]));
         print(json_encode($array));
     }
