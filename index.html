@@ -10,17 +10,29 @@
              */
             function question()
             {
-                var url = 'question.php?tag=' + $('#query').val();
-                $.getJSON(url, function(data) {
-                    console.log("got here");
-                    $('#question').html(data[0]);
-                });
+                console.log("Started");
+                var url = 'question.php?'; //+ $('#query').val();
+                $.getJSON(url, function() {
+                    console.log( "success" );
+                    })
+                    .done(function() {
+                    console.log( "second success" );
+                    })
+                    .fail(function() {
+                    console.log( "error" );
+                    })
+                    .always(function() {
+                    console.log( "complete" );
+                    });
+                    //console.log("here");
+                    
             }
 
         </script>
         <title>Quizbank50</title>
     </head>
     <body>
+        <!--<form action = "question.php" method = "get">-->
         <form onsubmit="question(); return false;">
             Tag: <input autocomplete="off" autofocus id="query" type="text"/>
             <br/>
