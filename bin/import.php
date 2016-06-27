@@ -44,8 +44,6 @@
     // iterate over file's rows
     //get past the header.
     $row = fgetcsv($handle, 1000, "\t");
-    $row = fgetcsv($handle, 1000, "\t");
-    $row = fgetcsv($handle, 1000, "\t");
     $row = explode(',', $row[0]);
     $boolean = CS50::query("INSERT IGNORE INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)", $row[0], $row[1], $row[2]);
     if($boolean)
@@ -69,6 +67,8 @@
         }
         
         
+        //$row = fgetcsv($handle, 1000, "\t");
+    //$row = fgetcsv($handle, 1000, "\t");
         // $row = explode(',', $row[0]);
         // // insert question into database
         // //print($row);
