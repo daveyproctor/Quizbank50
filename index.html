@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <script>
+
+            /**
+             * Gets a quote via JSON.
+             */
+            function question()
+            {
+                var url = 'question.php?tag=' + $('#query').val();
+                $.getJSON(url, function(data) {
+                    $('#question').html(data[0]);
+                });
+            }
+
+        </script>
+        <title>Quizbank50</title>
+    </head>
+    <body>
+        <form onsubmit="question(); return false;">
+            Tag: <input autocomplete="off" autofocus id="query" type="text"/>
+            <br/>
+            Question: <span id="question">to be determined</span>
+            <br/><br/>
+            <input type="submit" value="Get Question"/>
+        </form>
+    </body>
+</html>
