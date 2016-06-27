@@ -20,6 +20,7 @@
                     $('#question').html(data["key"]);
                     })
                     .fail(function(error) {
+                    console.log("we erred here");
                     console.log( error );
                     })
                     .always(function(data) {
