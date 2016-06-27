@@ -26,29 +26,7 @@
     // requirements
     require(__DIR__ . "/../includes/config.php");
 
-    // // ensure proper usage
-    // if ($argc !== 2)
-    // {
-    //     print("Usage: import /path/to/txt\n");
-    //     exit(1);
-    // }
-
-    // // ensure file exists
-    // if (!file_exists($argv[1]))
-    // {
-    //     print("File does not exist: {$argv[1]}\n");
-    //     exit(1);
-    // }
-
-    // // ensure file is readable
-    // if (!is_readable($argv[1]))
-    // {
-    //     print("File is not readable: {$argv[1]}\n");
-    //     exit(1);
-    // }
-
-    // open file
-    //$handle = fopen($argv[1], "r");
+    
     
     $handle = fopen(__DIR__ . "/../questions.csv", "r");
     
@@ -78,5 +56,31 @@
     print("ended");
     // success
     exit(0);
+    
+    
+    //scrap
+    // // ensure proper usage
+    // if ($argc !== 2)
+    // {
+    //     print("Usage: import /path/to/txt\n");
+    //     exit(1);
+    // }
+
+    // // ensure file exists
+    // if (!file_exists($argv[1]))
+    // {
+    //     print("File does not exist: {$argv[1]}\n");
+    //     exit(1);
+    // }
+
+    // // ensure file is readable
+    // if (!is_readable($argv[1]))
+    // {
+    //     print("File is not readable: {$argv[1]}\n");
+    //     exit(1);
+    // }
+
+    // open file
+    //$handle = fopen($argv[1], "r");
 
 ?>
