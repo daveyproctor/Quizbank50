@@ -10,6 +10,7 @@
         // print("hi");
         
         $array["key"] = file_get_contents("question.html");
-        print(json_encode(["key" => "value"]));
+        //print(json_encode(["key" => "value"]));
+        print(json_encode($array));
     }
 ?>
