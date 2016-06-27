@@ -36,26 +36,46 @@
     $question_id = 1;
     // iterate over file's rows
     //get past the header.
+    //$row = fgetcsv($handle, 1000, "\t");
     $row = fgetcsv($handle, 1000, "\t");
     print(json_encode($row));
     print("\n");
     
-    // $row = explode(',', $row[0]);
-    // print($row[0]);
-    // print("\n");
+    $row = explode(',', $row[0]);
+    print("result: ");
+    print(json_encode($row));
+    print("\n");
+    print($row[0]);
+    print("\n");
     // print($row[0][0]);
     // print("\n");
-    // exit(0);
-    while ($row = fgetcsv($handle, 0, "\t") && $question_id < 10)
+    $boolean = CS50::query("INSERT IGNORE INTO questions (Year) VALUES (?)", $row[0]);
+    if($boolean)
+    {
+        print("this worked\n");
+    }
+    exit(0);
+    
+     //(($array = fgetcsv($fp, 1000, "\t")) != FALSE) 
+    while (($row = fgetcsv($handle, 1000, "\t")) == FALSE)
     {
         $row = explode(',', $row[0]);
         // insert question into database
-        print($row);
-        if (!(CS50::query("INSERT INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)",
-        $row[0], $row[1], $row[2])) && tag_insert($row, $question_id))
-        {
-            printf("Could not insert into database.\n");
-        }
+        //print($row);
+        print("got here");
+        exit(1);
+        var_dump($row);
+        //if (!(CS50::query("INSERT IGNORE INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)", $row[0], $row[1], $row[2])))
+        // CS50::query("INSERT IGNORE INTO users (username, hash, viewNum, name1, name2) 
+        //     VALUES(?, ?, 1, ?, ?)", $_POST["username"], password_hash($_POST["password"], PASSWORD_DEFAULT), 
+        //     $_POST["name1"], $_POST["name2"]);
+        // {
+        //     print("Could not insert into questions table.\n");
+        // }
+        // if (!tag_insert($row, $question_id))
+        // {
+        //     print("could not insert into tags table");
+        // }
         $question_id++;
     }
     fclose($handle);
