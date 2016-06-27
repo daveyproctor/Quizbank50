@@ -12,6 +12,7 @@
             {
                 var url = 'question.php?tag=' + $('#query').val();
                 $.getJSON(url, function(data) {
+                    console.log("got here");
                     $('#question').html(data[0]);
                 });
             }
