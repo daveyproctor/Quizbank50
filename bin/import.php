@@ -5,9 +5,7 @@
     //so max index is ten
     define("LINE_END", 11);
     
-    print("hello world");
-    
-    //helper function
+    //helper function to insert question's several tags into tag table.
     function tag_insert($row, $question_id)
     {
         $index = SUBJECT_INDEX;
@@ -25,8 +23,6 @@
     }
     // requirements
     require(__DIR__ . "/../includes/config.php");
-
-    
     
     $handle = fopen(__DIR__ . "/../questions.csv", "r");
     
@@ -43,7 +39,7 @@
     $row = fgetcsv($handle, 0, "\t");
     while ($row = fgetcsv($handle, 0, "\t") && $question_id < 10)
     {
-        // insert country into database
+        // insert question into database
         if (!(CS50::query("INSERT INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)",
         $row[0], $row[1], $row[2])) && tag_insert($row, $question_id))
         {
@@ -59,6 +55,8 @@
     
     
     //scrap
+        
+    //print("hello world");
     // // ensure proper usage
     // if ($argc !== 2)
     // {
