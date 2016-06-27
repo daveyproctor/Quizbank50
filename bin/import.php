@@ -36,10 +36,21 @@
     $question_id = 1;
     // iterate over file's rows
     //get past the header.
-    $row = fgetcsv($handle, 0, "\t");
+    $row = fgetcsv($handle, 1000, "\t");
+    print(json_encode($row));
+    print("\n");
+    
+    // $row = explode(',', $row[0]);
+    // print($row[0]);
+    // print("\n");
+    // print($row[0][0]);
+    // print("\n");
+    // exit(0);
     while ($row = fgetcsv($handle, 0, "\t") && $question_id < 10)
     {
+        $row = explode(',', $row[0]);
         // insert question into database
+        print($row);
         if (!(CS50::query("INSERT INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)",
         $row[0], $row[1], $row[2])) && tag_insert($row, $question_id))
         {
