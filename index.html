@@ -11,21 +11,24 @@
             function question()
             {
                 console.log("Started");
-                var url = 'question.php?'; //+ $('#query').val();
-                $.getJSON(url, function() {
+                var url = 'question.php'; //+ $('#query').val();
+                $.getJSON(url, function(data) {
                     console.log( "success" );
                     })
-                    .done(function() {
+                    .done(function(data) {
                     console.log( "second success" );
+                    $('#question').html(data["key"]);
                     })
-                    .fail(function() {
-                    console.log( "error" );
+                    .fail(function(error) {
+                    console.log( error );
                     })
-                    .always(function() {
+                    .always(function(data) {
                     console.log( "complete" );
+                    console.log("data: ");
+                    console.log(data);
                     });
                     //console.log("here");
-                    
+                    //$('#question').html(data[0]);
             }
 
         </script>

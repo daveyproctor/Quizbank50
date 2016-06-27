@@ -9,7 +9,7 @@
         // print(file_get_contents("question.html"));
         // print("hi");
         
-        return(file_get_contents("question.html"));
-        
+        $array["key"] = file_get_contents("question.html");
+        print(json_encode(["key" => "value"]));
     }
 ?>
