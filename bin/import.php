@@ -36,20 +36,11 @@
     $question_id = 1;
     // iterate over file's rows
     //get past the header.
-    //$row = fgetcsv($handle, 1000, "\t");
     $row = fgetcsv($handle, 1000, "\t");
-    print(json_encode($row));
-    print("\n");
-    
+    $row = fgetcsv($handle, 1000, "\t");
+    $row = fgetcsv($handle, 1000, "\t");
     $row = explode(',', $row[0]);
-    print("result: ");
-    print(json_encode($row));
-    print("\n");
-    print($row[0]);
-    print("\n");
-    // print($row[0][0]);
-    // print("\n");
-    $boolean = CS50::query("INSERT IGNORE INTO questions (Year) VALUES (?)", $row[0]);
+    $boolean = CS50::query("INSERT IGNORE INTO questions (Year, Quiz_num, Question_num) VALUES (?,?,?)", $row[0], $row[1], $row[2]);
     if($boolean)
     {
         print("this worked\n");
@@ -83,6 +74,17 @@
     print("ended");
     // success
     exit(0);
+    
+    //scrap2
+    // print(json_encode($row));
+    // print("\n");
+    // print("result: ");
+    // print(json_encode($row));
+    // print("\n");
+    // print($row[0]);
+    // print("\n");
+    // print($row[0][0]);
+    // print("\n");
     
     
     //scrap
