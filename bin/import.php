@@ -50,7 +50,7 @@
     // open file
     //$handle = fopen($argv[1], "r");
     
-    $handle = fopen("../questions.csv", "r");
+    $handle = fopen(__DIR__ . "/../questions.csv", "r");
     
     if ($handle === false)
     {
