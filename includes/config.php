@@ -28,7 +28,7 @@
     {
         if (empty($_SESSION["id"]))
         {
-            redirect("first.php");
+            redirect("login.php");
         }
     }
 
