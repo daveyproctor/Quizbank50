@@ -4,6 +4,39 @@
     <head>
         <script src="https://code.jquery.com/jquery-latest.min.js"></script>
         <script>
+            /**
+             * Handles typeahead
+             */
+             
+            function tags(){
+                var url = 'tags.php?' + $('#query').val();
+                console.log(url);
+                
+                // $.getJSON(url, function(data) {
+                //     console.log( "success" );
+                //     })
+                //     .done(function(data) {
+                //     console.log( "second success" );
+                //     $('#question').html(data["key"]);
+                //     })
+                //     .fail(function(error) {
+                //     console.log("we erred here");
+                //     console.log( error );
+                //     })
+                //     .always(function(data) {
+                //     console.log( "complete" );
+                //     console.log("data: ");
+                //     console.log(data);
+                //     });
+            }
+            //when doc is ready...
+            $(function(){
+                    //do this
+                    console.log('hello');
+                    tags();
+            });
+            
+            //$(function())
 
             /**
              * Gets a quote via JSON.
@@ -38,7 +71,15 @@
     <body>
         <!--<form action = "question.php" method = "get">-->
         <form onsubmit="question(); return false;">
-            Tag: <input autocomplete="off" autofocus id="query" type="text"/>
+            Tag: 
+            <!--<input autocomplete="off" autofocus id="query" type="text"/>-->
+            
+            <!--input field with typeahead-->
+            <input id='query' type='text' list='listid'>
+                <datalist id='listid'>
+                   <option label='label1' value='value1'>
+                   <option label='label2' value='value2'>
+                </datalist>
             <br/>
             Question: <span id="question">to be determined</span>
             <br/><br/>
