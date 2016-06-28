@@ -7,7 +7,6 @@
             /**
              * Handles typeahead
              */
-             
             function tags(){
                 var url = 'tags.php?' + $('#query').val();
                 console.log(url);
@@ -69,7 +68,6 @@
                     //console.log("here");
                     //$('#question').html(data[0]);
             }
-
         </script>
         <title>Quizbank50</title>
     </head>
@@ -77,14 +75,11 @@
         <!--<form action = "question.php" method = "get">-->
         <form onsubmit="question(); return false;">
             Tag: 
-            <!--<input autocomplete="off" autofocus id="query" type="text"/>-->
-            
-            <!--input field with typeahead-->
-            <input id='query' type='text' list='listid'>
-                <datalist id='tag_list'>
-                   <option value='value1'>
-                   <option value='value2'>
-                </datalist>
+            <input type='text' list='tag_list'>
+            <datalist id='tag_list'>
+               <option label='label1' value='value1'>
+               <option label='label2' value='value2'>
+            </datalist>
             <br/>
             Question: <span id="question">to be determined</span>
             <br/><br/>
@@ -92,3 +87,12 @@
         </form>
     </body>
 </html>
+
+            <!--<input autocomplete="off" autofocus id="query" type="text"/>-->
+            
+            <!--input field with typeahead-->
+            <!--<input id='query' type='text' list='listid'>-->
+            <!--    <datalist id='tag_list'>-->
+            <!--       <option value='value1'>-->
+            <!--       <option value='value2'>-->
+            <!--    </datalist>-->
