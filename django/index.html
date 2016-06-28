@@ -293,6 +293,18 @@ function query() {
 	});
 }
 
+function hideAnswer(){
+	$("#answer_results").hide();
+	$("#show_answer").show();
+	$("#hide_answer").hide();
+}
+
+function showAnswer(){
+	$("#answer_results").show();
+	$("#show_answer").hide();
+	$("#hide_answer").show();
+}
+
 function questionDetail(id) {
 	var parameters = {
 		csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -315,8 +327,24 @@ function questionDetail(id) {
 		question_results += '<b>Question</b>:<br />';
 		question_results += data['question'];
 		question_results += '<br />';
+		
+		//add span for answer. initially hidden.
+		question_results += '<span id=\"answer_results\" visibility=\'hidden\'>'
+		
+		//answer
 		question_results += '<b>Answer</b>:<br />';
 		question_results += data['answer'];
+		
+		//close span
+		question_results += '</span>';
+		
+		//button to show answer
+		question_results += '<button type=\"button\" id=\"show_answer\">Show Answer</button>'
+		
+		//button to hide answer. initially hidden until we show answer
+		question_results += '<button type=\"button\" id=\"hide_anser\" visibility=\'hidden\'>Hide Answer</button>'
+		
+		question_result += '<br />';
 		question_results += '<br /><b>Subject Tags</b>: ';
 		question_results += data['tags'].join(", ");
 		question_results += '<br /><b>Question Type</b>: ';
@@ -333,7 +361,14 @@ function questionDetail(id) {
 		question_results += data['difficulty'];
 		
 		$('#question-results').html(question_results);
-		$('#answer-results').html(answer_results);
+		
+		//add a listener for clicking the button
+		$("#show_answer").click(function(){
+			showAnswer();
+		});
+		$("#hide_answer").click(function(){
+			hideAnswer();
+		});
 	});
 	request.fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
