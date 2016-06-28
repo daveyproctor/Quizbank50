@@ -16,9 +16,9 @@
                     .done(function(data) {
                         console.log( "second success" );
                         options = "";
-                        for (tag in data)
+                        for (tagkey in data)
                         {
-                            option = "<option value=" + tag + ">";
+                            option = "<option value=" + data[tagkey] + ">";
                             options = options.concat(option);
                         }
                         $('#tag_list').html(options);
@@ -37,7 +37,7 @@
             $(function(){
                     //do this
                     console.log('hello');
-                    //tags();
+                    tags();
             });
             
             //$(function())
