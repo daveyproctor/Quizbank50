@@ -23,7 +23,7 @@
                         options = "";
                         for (tagkey in data)
                         {
-                            option = "<option value=" + data[tagkey] + ">";
+                            option = "<option value=" + data[tagkey]["tag"] + ">";
                             options = options.concat(option);
                         }
                         $('#tag_list').html(options);
