@@ -2,7 +2,8 @@
  * Handles typeahead
  */
 function tags(){
-    var start = $('#query').val();
+    var start = $('#query1').val();
+    console.log("tags function starts");
     if (start == null)
     {
         start = "";
@@ -15,12 +16,13 @@ function tags(){
         .done(function(data) {
             console.log( "second success" );
             options = "";
-            for (tagkey in data)
+            for (var tagkey in data)
             {
                 option = "<option value=" + data[tagkey]["tag"] + ">";
                 options = options.concat(option);
             }
             $('#tag_list').html(options);
+            console.log("changed tag_list data");
         })
         .fail(function(error) {
             console.log("we erred here2");
@@ -39,7 +41,8 @@ $(function(){
         tags();
 });
 
-$('#query').keypress(function() {
+$('#query1').keypress(function() {
+    console.log("query id was touched");
     tags();
 });
 

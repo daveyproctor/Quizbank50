@@ -13,6 +13,7 @@
         else
         {
             print(json_encode($tags));
+            //print(json_encode(["key" => "value"]));
         }
     }
 ?>
