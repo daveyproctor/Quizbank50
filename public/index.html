@@ -12,20 +12,26 @@
                 var url = 'tags.php?' + $('#query').val();
                 console.log(url);
                 $.getJSON(url, function(data) {
-                    console.log( "success" );
+                        console.log( "success" );
                     })
                     .done(function(data) {
-                    console.log( "second success" );
-                    $('#question').html(data["key"]);
+                        console.log( "second success" );
+                        options = "";
+                        for (tag in data)
+                        {
+                            option = "<option value=" + tag + ">";
+                            options = options.concat(option);
+                        }
+                        $('#tag_list').html(options);
                     })
                     .fail(function(error) {
-                    console.log("we erred here");
-                    console.log( error );
+                        console.log("we erred here");
+                        console.log( error );
                     })
                     .always(function(data) {
-                    console.log( "complete" );
-                    console.log("data: ");
-                    console.log(data);
+                        console.log( "complete" );
+                        console.log("data: ");
+                        console.log(data);
                     });
             }
             //when doc is ready...
@@ -75,7 +81,7 @@
             
             <!--input field with typeahead-->
             <input id='query' type='text' list='listid'>
-                <datalist id='listid'>
+                <datalist id='tag_list'>
                    <option value='value1'>
                    <option value='value2'>
                 </datalist>
