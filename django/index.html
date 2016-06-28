@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="row">
-<div class="col-lg-3 col-md-3 col-sm-4 col-xs-5">
+<div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 col-quizquery">
 
 <!-- <form method="post"> -->
 <!-- {% csrf_token %} -->
@@ -18,17 +18,36 @@
 </div>
 <br />
 
-Difficulties<br />
-<a class="btn btn-default btn-sm" onclick="d_select_all()">Select All</a>
-  <a class="btn btn-default btn-sm" onclick="d_select_none()">Deselect All</a>
-  <ul id="difficulty-dropdown">
-  	<li><input type="checkbox" name="difficulty_1" value=true checked> 1 (Easy)</li>
-  	<li><input type="checkbox" name="difficulty_2" value=true checked> 2</li>
-  	<li><input type="checkbox" name="difficulty_3" value=true checked> 3 (Medium)</li>
-  	<li><input type="checkbox" name="difficulty_4" value=true checked> 4</li>
-  	<li><input type="checkbox" name="difficulty_5" value=true checked> 5 (Difficult)</li>
-  </ul>
-	<br />
+<!-- Difficulty Selector -->
+<div class="module" id="difficulty-dropdown">
+	<table>
+	<caption>
+	    <a href="" class="section" title="Difficulty Selector">Difficulties</a>
+	    <span style="float:right;"><a class="box-link" onclick="d_select_all()">All</a> / 
+	    <a class="box-link" onclick="d_select_none()">None</a></span>
+	</caption>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="difficulty_1" value=true checked></td>
+	    <th scope="row">1 (Easy)</th>
+	</tr>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="difficulty_2" value=true checked></td>
+	    <th scope="row">2</th>
+	</tr>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="difficulty_3" value=true checked></td>
+	    <th scope="row">3 (Medium)</th>
+	</tr>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="difficulty_3" value=true checked></td>
+	    <th scope="row">4</th>
+	</tr>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="difficulty_3" value=true checked></td>
+	    <th scope="row">5 (Difficult)</th>
+	</tr>
+	</table>
+</div>
 
 	Question Types<br />
 <a class="btn btn-default btn-sm" onclick="q_select_all()">Select All</a>
@@ -37,14 +56,23 @@ Difficulties<br />
   </ul>
 	<br />
 
-Release Status<br />
-<a class="btn btn-default btn-sm" onclick="r_select_all()">Select All</a>
-  <a class="btn btn-default btn-sm" onclick="r_select_none()">Deselect All</a>
-  <ul id="release-dropdown">
-  <li><input type="checkbox" name="released_0" value=true checked> Not Released to Public</li>
-  <li><input type="checkbox" name="released_1" value=true checked> Released to Public</li>
-  </ul>
-	<br />
+<div class="module" id="release-dropdown">
+	<table>
+	<caption>
+	    <a href="" class="section" title="Difficulty Selector">Release Statuses</a>
+	    <span style="float:right;"><a class="box-link" onclick="r_select_all()">All</a> / 
+	    <a class="box-link" onclick="r_select_none()">None</a></span>
+	</caption>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="released_0" value=true checked></td>
+	    <th scope="row">Not Released to Public</th>
+	</tr>
+	<tr class="checkrow">
+		<td><input type="checkbox" name="released_1" value=true checked></td>
+	    <th scope="row">Released to Public</th>
+	</tr>
+	</table>
+</div>
 
 
 Authorship Year<br />
@@ -154,6 +182,11 @@ $(document).ready(function() {
     "click":function(e){
       e.stopPropagation();
     }
+	});
+
+	// set all rows with checkboxes to toggle checkbox on click
+	$('.checkrow').on('click', function() {
+		console.log('hi');
 	});
 
 });
@@ -287,22 +320,11 @@ function query() {
 		query_results += '</ul>';
 
 		$('#query-results').html(query_results)
+		$('html, body').animate({ scrollTop: 0 }, 'fast');
 	});
 	request.fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
 	});
-}
-
-function hideAnswer(){
-	$("#answer_results").hide();
-	$("#show_answer").show();
-	$("#hide_answer").hide();
-}
-
-function showAnswer(){
-	$("#answer_results").show();
-	$("#show_answer").hide();
-	$("#hide_answer").show();
 }
 
 function questionDetail(id) {
@@ -329,7 +351,7 @@ function questionDetail(id) {
 		question_results += '<br />';
 		
 		//add span for answer. initially hidden.
-		question_results += '<span id=\"answer_results\" visibility=\'hidden\'>'
+		question_results += '<span id=\"answer_results\">'
 		
 		//answer
 		question_results += '<b>Answer</b>:<br />';
@@ -342,9 +364,9 @@ function questionDetail(id) {
 		question_results += '<button type=\"button\" id=\"show_answer\">Show Answer</button>'
 		
 		//button to hide answer. initially hidden until we show answer
-		question_results += '<button type=\"button\" id=\"hide_answer\" visibility=\'hidden\'>Hide Answer</button>'
+		question_results += '<button type=\"button\" id=\"hide_answer\">Hide Answer</button>'
 		
-		question_result += '<br />';
+		question_results += '<br />';
 		question_results += '<br /><b>Subject Tags</b>: ';
 		question_results += data['tags'].join(", ");
 		question_results += '<br /><b>Question Type</b>: ';
@@ -369,11 +391,26 @@ function questionDetail(id) {
 		$("#hide_answer").click(function(){
 			hideAnswer();
 		});
+
+		hideAnswer();
 	});
 	request.fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
 	});
 }
+
+function hideAnswer(){
+	$("#answer_results").hide();
+	$("#show_answer").show();
+	$("#hide_answer").hide();
+}
+
+function showAnswer(){
+	$("#answer_results").show();
+	$("#show_answer").hide();
+	$("#hide_answer").show();
+}
+
 
 </script>
 {% endblock %}
