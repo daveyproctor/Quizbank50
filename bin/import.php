@@ -40,7 +40,7 @@
         exit(1);
     }
 
-    $question_id = 1;
+    $question_id = 0;
     // iterate over file's rows
     //get past the header.
     $row = fgetcsv($handle, 1000, "\t");
