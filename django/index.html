@@ -6,6 +6,15 @@
 
 <!-- <form method="post"> -->
 <!-- {% csrf_token %} -->
+
+<!--subject selector-->
+<input type='text' list='tag_list'>
+<datalist id='tag_list'>
+   <option label='label1' value='value1'>
+   <option label='label2' value='value2'>
+</datalist>
+
+
 <div class="dropdown" id="tags-div">
   <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose Subjects
   <span class="caret"></span></button>
@@ -13,6 +22,8 @@
   <a class="btn btn-default btn-sm" onclick="t_select_all()">Select All</a>
   <a class="btn btn-default btn-sm" onclick="t_select_none()">Deselect All</a>
   <span id="tag-dropdown">
+  	<input id='tag_query' type='text'>
+  	<br />
   </span>
   </ul>
 </div>
@@ -102,7 +113,36 @@ Authorship Year<br />
 
 {% block script %}
 <script>
+
+//global variable
+var tag_dropdown_data;
+
+//script for filtering tags. place it wherever.
+function fillDropdown(){
+	var data = tag_dropdown_data;
+	var start = $('#tag_query').val();
+	if (start == null){
+		start = '';
+	}
+	dropdown_contents = '';
+	for (var i = 0, len = data.length; i < len; i++) {
+		if (data[i][0].startsWith(start)){
+			dropdown_contents += '<li><input type="checkbox" name="tag_';
+			dropdown_contents += data[i][0];
+			dropdown_contents += '" value=true> ';
+			dropdown_contents += data[i][1];
+			dropdown_contents += '</li>';
+		}
+	}
+	$('#tag-dropdown').html(dropdown_contents);
+}
+
 $(document).ready(function() {
+	
+	//add listener for user typing; filter results based on this.
+   	$('#tag_query').keypress(function(){
+   		fillDropdown();
+   	});
 
 	// ajax request to get tags
 	var parameters = {
@@ -115,16 +155,30 @@ $(document).ready(function() {
 	});
 	request.done(function(response, textStatus, jqXHR) {
 		data = jQuery.parseJSON(response);
-		dropdown_contents = '';
-		for (var i = 0, len = data.length; i < len; i++) {
-		  dropdown_contents += '<li><input type="checkbox" name="tag_';
-		  dropdown_contents += data[i][0];
-		  dropdown_contents += '" value=true> ';
-		  dropdown_contents += data[i][1];
-		  dropdown_contents += '</li>';
-		}
-		$('#tag-dropdown').html(dropdown_contents);
-   		});
+		tag_dropdown_data = data;
+		fillDropdown(tag_dropdown_data);
+		// dropdown_contents = '';
+		
+		// //add the text input field.
+		// dropdown_contents += '<input id=\'tag_query\' type=\'text\' list=\'tag_list\'>'
+		// dropdown_contents += '</br>'
+		
+		// dropdown_contents += '<span id=\'tag_list_elements\'>'
+		// for (var i = 0, len = data.length; i < len; i++) {
+		//   dropdown_contents += '<li><input type="checkbox" name="tag_';
+		//   dropdown_contents += data[i][0];
+		//   dropdown_contents += '" value=true> ';
+		//   dropdown_contents += data[i][1];
+		//   dropdown_contents += '</li>';
+		// }
+		// dropdown_contents += '</span>';
+		// $('#tag-dropdown').html(dropdown_contents);
+  // 		});
+   		
+  // 		//add listener for user typing; filter results based on this.
+  // 		$('#tag_query').keypress(function(){
+  // 			filter();
+   		})
 	request.fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
 	});
