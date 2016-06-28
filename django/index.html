@@ -1,0 +1,343 @@
+{% extends 'quizbank/base.html' %}
+
+{% block body %}
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-4 col-xs-5">
+
+<!-- <form method="post"> -->
+<!-- {% csrf_token %} -->
+<div class="dropdown" id="tags-div">
+  <button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose Subjects
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu scrolling-dropdown">
+  <a class="btn btn-default btn-sm" onclick="t_select_all()">Select All</a>
+  <a class="btn btn-default btn-sm" onclick="t_select_none()">Deselect All</a>
+  <span id="tag-dropdown">
+  </span>
+  </ul>
+</div>
+<br />
+
+Difficulties<br />
+<a class="btn btn-default btn-sm" onclick="d_select_all()">Select All</a>
+  <a class="btn btn-default btn-sm" onclick="d_select_none()">Deselect All</a>
+  <ul id="difficulty-dropdown">
+  	<li><input type="checkbox" name="difficulty_1" value=true checked> 1 (Easy)</li>
+  	<li><input type="checkbox" name="difficulty_2" value=true checked> 2</li>
+  	<li><input type="checkbox" name="difficulty_3" value=true checked> 3 (Medium)</li>
+  	<li><input type="checkbox" name="difficulty_4" value=true checked> 4</li>
+  	<li><input type="checkbox" name="difficulty_5" value=true checked> 5 (Difficult)</li>
+  </ul>
+	<br />
+
+	Question Types<br />
+<a class="btn btn-default btn-sm" onclick="q_select_all()">Select All</a>
+  <a class="btn btn-default btn-sm" onclick="q_select_none()">Deselect All</a>
+  <ul id="qtype-dropdown">
+  </ul>
+	<br />
+
+Release Status<br />
+<a class="btn btn-default btn-sm" onclick="r_select_all()">Select All</a>
+  <a class="btn btn-default btn-sm" onclick="r_select_none()">Deselect All</a>
+  <ul id="release-dropdown">
+  <li><input type="checkbox" name="released_0" value=true checked> Not Released to Public</li>
+  <li><input type="checkbox" name="released_1" value=true checked> Released to Public</li>
+  </ul>
+	<br />
+
+
+Authorship Year<br />
+ <a class="btn btn-default btn-sm" onclick="y_select_all()">Select All</a>
+  <a class="btn btn-default btn-sm" onclick="y_select_none()">Deselect All</a>
+  <ul id="year-dropdown">
+  </ul>
+	<br />
+
+
+<button onclick="query()">Search Quiz Bank</button>
+<!-- </form> -->
+
+</div>
+<div class="col-lg-9 col-md-9 col-sm-6 col-xs-7">
+
+<span id="query-results">
+</span>
+
+<span id="question-results">
+</span>
+
+</div>
+</div>
+<br /><br /><br />
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function() {
+
+	// ajax request to get tags
+	var parameters = {
+		csrfmiddlewaretoken: '{{ csrf_token }}'
+	};
+	var request = $.ajax({
+		url: "{% url 'quizbank:taglist' %}",
+		type: 'POST',
+		data: parameters
+	});
+	request.done(function(response, textStatus, jqXHR) {
+		data = jQuery.parseJSON(response);
+		dropdown_contents = '';
+		for (var i = 0, len = data.length; i < len; i++) {
+		  dropdown_contents += '<li><input type="checkbox" name="tag_';
+		  dropdown_contents += data[i][0];
+		  dropdown_contents += '" value=true> ';
+		  dropdown_contents += data[i][1];
+		  dropdown_contents += '</li>';
+		}
+		$('#tag-dropdown').html(dropdown_contents);
+   		});
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+	});
+
+	// ajax request to get years
+	var request = $.ajax({
+		url: "{% url 'quizbank:yearlist' %}",
+		type: 'POST',
+		data: parameters
+	});
+	request.done(function(response, textStatus, jqXHR) {
+		data = jQuery.parseJSON(response);
+		dropdown_contents = '';
+		for (var i = 0, len = data.length; i < len; i++) {
+		  dropdown_contents += '<li><input type="checkbox" name="year_';
+		  dropdown_contents += data[i];
+		  dropdown_contents += '" value=true checked> ';
+		  dropdown_contents += data[i];
+		  dropdown_contents += '</li>';
+		}
+		if (data.length == 0)
+		{
+			dropdown_contents = 'No years to view.'
+		}
+		$('#year-dropdown').html(dropdown_contents);
+   		});
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+	});
+
+	// ajax request to get years
+	var request = $.ajax({
+		url: "{% url 'quizbank:qtypelist' %}",
+		type: 'POST',
+		data: parameters
+	});
+	request.done(function(response, textStatus, jqXHR) {
+		data = jQuery.parseJSON(response);
+		dropdown_contents = '';
+		for (var i = 0, len = data.length; i < len; i++) {
+		  dropdown_contents += '<li><input type="checkbox" name="qtype_';
+		  dropdown_contents += data[i][0];
+		  dropdown_contents += '" value=true checked> ';
+		  dropdown_contents += data[i][1];
+		  dropdown_contents += '</li>';
+		}
+		$('#qtype-dropdown').html(dropdown_contents);
+   		});
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+	});
+
+	// This keeps the tags div open when new tags are selected
+	$('#tags-div .dropdown-menu').on({
+    "click":function(e){
+      e.stopPropagation();
+    }
+	});
+
+});
+
+// these functions handle the select all / deselect all toggles
+function q_select_all() {
+	$('#qtype-dropdown input:checkbox').prop('checked', true);
+}
+
+function q_select_none() {
+	$('#qtype-dropdown input:checkbox').prop('checked', false);
+}
+
+function y_select_all() {
+	$('#year-dropdown input:checkbox').prop('checked', true);
+}
+
+function y_select_none() {
+	$('#year-dropdown input:checkbox').prop('checked', false);
+}
+
+function t_select_all() {
+	$('#tag-dropdown input:checkbox').prop('checked', true);
+}
+
+function t_select_none() {
+	$('#tag-dropdown input:checkbox').prop('checked', false);
+}
+
+function d_select_all() {
+	$('#difficulty-dropdown input:checkbox').prop('checked', true);
+}
+
+function d_select_none() {
+	$('#difficulty-dropdown input:checkbox').prop('checked', false);
+}
+
+function r_select_all() {
+	$('#release-dropdown input:checkbox').prop('checked', true);
+}
+
+function r_select_none() {
+	$('#release-dropdown input:checkbox').prop('checked', false);
+}
+
+// this function handles the querying
+function query() {
+	$('#query-results').html('');
+	$('#question-results').html('');
+
+	// Creating lists to store all of the data to query
+	tags = [];
+	difficulties = [];
+	qtypes = [];
+	releases = [];
+	years = [];
+
+	// Go through tag names and extract the data for what needs to be queried
+
+	$('#tag-dropdown input:checked').each(function(index) {
+		tag = $(this).attr('name');
+		tag = tag.replace('tag_', '');
+		// using split and join to replace all, as opposed to just first _
+		tag = tag.split('_').join(' ');
+		tags.push(tag);
+	});
+
+	$('#difficulty-dropdown input:checked').each(function(index) {
+		difficulty = $(this).attr('name');
+		difficulty = difficulty.replace('difficulty_', '');
+		difficulties.push(parseInt(difficulty));
+	});
+
+	$('#qtype-dropdown input:checked').each(function(index) {
+		qtype = $(this).attr('name');
+		qtype = qtype.replace('qtype_', '');
+		qtype = qtype.split('_').join(' ');
+		// True/False is the one instance of a slash, handle that separately
+		qtype = qtype.replace('True False', 'True/False');
+		qtypes.push(qtype);
+	});
+
+	$('#release-dropdown input:checked').each(function(index) {
+		released = $(this).attr('name');
+		released = released.replace('released_', '');
+		releases.push(parseInt(released));
+	});
+
+	$('#year-dropdown input:checked').each(function(index) {
+		year = $(this).attr('name');
+		year = year.replace('year_', '');
+		years.push(parseInt(year));
+	});
+
+	var parameters = {
+		csrfmiddlewaretoken: '{{ csrf_token }}',
+		tags: tags,
+		difficulties: difficulties,
+		qtypes: qtypes,
+		releases: releases,
+		years: years
+	};
+
+	var request = $.ajax({
+		url: "{% url 'quizbank:query' %}",
+		type: 'POST',
+		data: parameters
+	});
+	request.done(function(response, textStatus, jqXHR) {
+		data = jQuery.parseJSON(response);
+		
+		query_results = '';
+		query_results += '<h3>Query Results:</h3>';
+		query_results += '<ul>';
+		for (i = 0, len = data.length; i < len; i++)
+		{
+			query_results += '<li>';
+			query_results += '<b><a onclick="questionDetail(' + data[i]['id'] + ')">';
+			query_results += data[i]['title'];
+			query_results += '</a></b>: ';
+
+			if (data[i]['question'].length > 250)
+			{
+				query_results += data[i]['question'].substring(0,250);
+				query_results += '...';
+			}
+			else
+				query_results += data[i]['question'];
+			query_results += '</li>';
+		}
+		query_results += '</ul>';
+
+		$('#query-results').html(query_results)
+	});
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+	});
+}
+
+function questionDetail(id) {
+	var parameters = {
+		csrfmiddlewaretoken: '{{ csrf_token }}',
+		id: id
+	};
+
+	var request = $.ajax({
+		url: "{% url 'quizbank:question_detail' %}",
+		type: 'POST',
+		data: parameters
+	});
+	request.done(function(response, textStatus, jqXHR) {
+		data = jQuery.parseJSON(response);
+
+		question_results = '';
+		question_results += '<h3>Question Detail:</h3>';
+		question_results += '<b>Title</b>: ';
+		question_results += data['title'];
+		question_results += '<br /><br />';
+		question_results += '<b>Question</b>:<br />';
+		question_results += data['question'];
+		question_results += '<br />';
+		question_results += '<b>Answer</b>:<br />';
+		question_results += data['answer'];
+		question_results += '<br /><b>Subject Tags</b>: ';
+		question_results += data['tags'].join(", ");
+		question_results += '<br /><b>Question Type</b>: ';
+		question_results += data['qtype'];
+		question_results += '<br /><b>Released to Public</b>: ';
+		question_results += data['released'] ? "Yes" : "No";
+		question_results += '<br /><b>Authorship Year</b>: ';
+		question_results += data['authorship_year'];
+		question_results += '<br /><b>Origin of Question (if applicable)</b>: ';
+		question_results += data['original_exam'] + ', ' + data['original_question'];
+		question_results += '<br /><b>Points</b>: ';
+		question_results += data['points'];
+		question_results += '<br /><b>Difficulty</b>: ';
+		question_results += data['difficulty'];
+		
+		$('#question-results').html(question_results)
+	});
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+	});
+}
+
+</script>
+{% endblock %}
