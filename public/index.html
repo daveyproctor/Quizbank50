@@ -8,7 +8,12 @@
              * Handles typeahead
              */
             function tags(){
-                var url = 'tags.php?' + $('#query').val();
+                var start = $('#query').val();
+                if (start == null)
+                {
+                    start = "";
+                }
+                var url = 'tags.php?start=' + start;
                 console.log(url);
                 $.getJSON(url, function(data) {
                         console.log( "success" );
@@ -24,7 +29,7 @@
                         $('#tag_list').html(options);
                     })
                     .fail(function(error) {
-                        console.log("we erred here");
+                        console.log("we erred here2");
                         console.log( error );
                     })
                     .always(function(data) {
